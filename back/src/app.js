@@ -44,20 +44,26 @@ app.post(
   login_required,
   upload.single("file"),
   async (req, res, next) => {
-    // res.status(200).send("Uploaded: " + req.file);
-    // console.log(req.file);
     try {
+      console.log(req.file.mimetype);
+      let fileExt = req.file.mimetype;
+      fileExt = fileExt.split("/");
+      console.log(fileExt[1]);
+
       let fileName = new Date().valueOf() + req.userId;
       await sharp(req.file.path)
         .resize({ width: 200, height: 200 })
         .withMetadata()
-        .toFile(`${__dirname}/../public/images/${fileName}.jpg`),
+        .toFile(`${__dirname}/../public/images/${fileName}.${fileExt[1]}`),
         (err, info) => {
           if (err) throw err;
+          console.log(`info : ${info}`);
+          fs.unlink(`${__dirname}/../public/images/`);
         };
 
       res.status(201).send({
-        imgUrl: `http://kdt-ai5-team13.elicecoding.com:5001/images/${fileName}.jpg`,
+        imgUrl: `http://localhost:5001/images/${fileName}.jpg`,
+        // imgUrl: `http://kdt-ai5-team13.elicecoding.com:5001/images/${fileName}.jpg`,
       });
     } catch (error) {
       next(error);
