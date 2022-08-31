@@ -12,19 +12,25 @@ import path from "path";
 const sharp = require("sharp");
 const fs = require("fs");
 const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, `${__dirname}/../public/images/`);
-  },
-  filename: function (req, file, cb) {
-    let extension = path.extname(file.originalname);
-    let newFileName = req.userId + extension;
-    cb(null, newFileName);
-  },
-});
+const imageDir = __dirname + "/../public/images";
 const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, imageDir);
+    },
+    filename: function (req, file, cb) {
+      let fileType = file.mimetype;
+      fileType = fileType.split("/");
+      let ext = fileType[1];
+      let newFileName = req.userId;
+      // 에러처리
+      if (!["png", "jpg", "jpeg"].includes(ext)) {
+        return cb(new Error("파일 확장자 확인: png, jpg, jpeg"));
+      }
+      cb(null, newFileName + ".jpg");
+    },
+    limits: { fileSize: 5 * 1024 * 1024 },
+  }),
 });
 const app = express();
 
@@ -52,38 +58,20 @@ app.use(certificateRouter);
 app.post("/upload", login_required, upload.single("file"), (req, res, next) => {
   let fileType = req.file.mimetype;
   fileType = fileType.split("/");
-  if (
-    fileType.length == 1 ||
-    !(fileType[1] === "jpg" || fileType[1] === "jpeg" || fileType[1] === "png")
-  ) {
-    fs.unlink(
-      `${__dirname}/../public/images/${req.userId}.${fileType[1]}`,
-      (err) => {
-        if (err) throw err;
-      }
-    );
-    throw new Error("파일 확장자 확인 : jpg, jpeg, png");
-  }
   let fileName = new Date().valueOf() + req.userId;
   sharp(req.file.path)
     .resize({ width: 200, height: 200 })
     .withMetadata()
-    .toFile(
-      `${__dirname}/../public/images/${fileName}.${fileType[1]}`,
-      (err) => {
-        if (err) throw err;
-        // 원본 삭제
-        fs.unlink(
-          `${__dirname}/../public/images/${req.userId}.${fileType[1]}`,
-          (err) => {
-            if (err) throw err;
-          }
-        );
-      }
-    );
+    .toFile(`${imageDir}/${fileName}.jpg`, (err) => {
+      if (err) throw err;
+      // 원본 삭제
+      // fs.unlink(`${__dirname}/../public/images/${req.userId}.jpg}`, (err) => {
+      //   if (err) throw err;
+      // });
+    });
 
   res.status(201).send({
-    // imgUrl: `http://localhost:5001/images/${fileName}.${fileType[1]}`,
+    // imgUrl: `http://localhost:5001/images/${fileName}.jpg}`,
     imgUrl: `http://kdt-ai5-team13.elicecoding.com:5001/images/${fileName}.${fileType[1]}`,
   });
 });
