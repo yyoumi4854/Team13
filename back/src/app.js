@@ -68,9 +68,9 @@ app.post("/upload", login_required, upload.single("file"), (req, res, next) => {
       .withMetadata()
       .toFile(
         `${__dirname}/../public/images/${fileName}.${fileType[1]}`,
-        (err, info) => {
+        (err) => {
           if (err) throw err;
-          console.log(`info: ${info}`);
+          // 원본 삭제
           fs.unlink(
             `${__dirname}/../public/images/${req.userId}.${fileType[1]}`,
             (err) => {
@@ -79,10 +79,9 @@ app.post("/upload", login_required, upload.single("file"), (req, res, next) => {
           );
         }
       );
-    //원본 삭제
 
     res.status(201).send({
-      imgUrl: `http://localhost:5001/images/${fileName}.jpg`,
+      imgUrl: `http://localhost:5001/images/${fileName}.${fileType[1]}`,
       // imgUrl: `http://kdt-ai5-team13.elicecoding.com:5001/images/${fileName}.jpg`,
     });
   } catch (error) {
