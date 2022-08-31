@@ -47,7 +47,7 @@ app.post(
     // res.status(200).send("Uploaded: " + req.file);
     // console.log(req.file);
     try {
-      let fileName = new Date().valueOf();
+      let fileName = new Date().valueOf() + req.userId;
       await sharp(req.file.path)
         .resize({ width: 200, height: 200 })
         .withMetadata()
