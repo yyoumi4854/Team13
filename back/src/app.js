@@ -50,44 +50,42 @@ app.use(awardRouter);
 app.use(certificateRouter);
 
 app.post("/upload", login_required, upload.single("file"), (req, res, next) => {
-  try {
-    let fileType = req.file.mimetype;
-    fileType = fileType.split("/");
-    if (
-      fileType.length == 1 ||
-      !(
-        fileType[1] === "jpg" ||
-        fileType[1] === "jpeg" ||
-        fileType[1] === "png"
-      )
-    ) {
-      throw new Error("파일 확장자 확인 : jpg, jpeg, png");
-    }
-    let fileName = new Date().valueOf() + req.userId;
-    sharp(req.file.path)
-      .resize({ width: 200, height: 200 })
-      .withMetadata()
-      .toFile(
-        `${__dirname}/../public/images/${fileName}.${fileType[1]}`,
-        (err) => {
-          if (err) throw err;
-          // 원본 삭제
-          fs.unlink(
-            `${__dirname}/../public/images/${req.userId}.${fileType[1]}`,
-            (err) => {
-              if (err) throw err;
-            }
-          );
-        }
-      );
-
-    res.status(201).send({
-      imgUrl: `http://localhost:5001/images/${fileName}.${fileType[1]}`,
-      // imgUrl: `http://kdt-ai5-team13.elicecoding.com:5001/images/${fileName}.jpg`,
-    });
-  } catch (error) {
-    next(error);
+  let fileType = req.file.mimetype;
+  fileType = fileType.split("/");
+  if (
+    fileType.length == 1 ||
+    !(fileType[1] === "jpg" || fileType[1] === "jpeg" || fileType[1] === "png")
+  ) {
+    fs.unlink(
+      `${__dirname}/../public/images/${req.userId}.${fileType[1]}`,
+      (err) => {
+        if (err) throw err;
+      }
+    );
+    throw new Error("파일 확장자 확인 : jpg, jpeg, png");
   }
+  let fileName = new Date().valueOf() + req.userId;
+  sharp(req.file.path)
+    .resize({ width: 200, height: 200 })
+    .withMetadata()
+    .toFile(
+      `${__dirname}/../public/images/${fileName}.${fileType[1]}`,
+      (err) => {
+        if (err) throw err;
+        // 원본 삭제
+        fs.unlink(
+          `${__dirname}/../public/images/${req.userId}.${fileType[1]}`,
+          (err) => {
+            if (err) throw err;
+          }
+        );
+      }
+    );
+
+  res.status(201).send({
+    imgUrl: `http://localhost:5001/images/${fileName}.${fileType[1]}`,
+    // imgUrl: `http://kdt-ai5-team13.elicecoding.com:5001/images/${fileName}.jpg`,
+  });
 });
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);
