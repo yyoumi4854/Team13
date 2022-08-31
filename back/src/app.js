@@ -12,9 +12,15 @@ import path from "path";
 const sharp = require("sharp");
 const fs = require("fs");
 const multer = require("multer");
-const upload = multer({
-  dest: `${__dirname}/../public/images/`,
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, `${__dirname}/../public/images/`);
+  },
+  filename: function (req, file, cb) {
+    cb(null, req.userId);
+  },
 });
+const upload = multer({ storage: storage });
 const app = express();
 
 // CORS 에러 방지
@@ -44,11 +50,15 @@ app.post(
   upload.single("file"),
   async (req, res, next) => {
     try {
-      let fileExt = req.file.mimetype;
-      fileExt = fileExt.split("/");
+      let fileType = req.file.mimetype;
+      fileType = fileType.split("/");
       if (
-        fileExt.length == 1 ||
-        !(fileExt[1] === "jpg" || fileExt[1] === "jpeg" || fileExt[1] === "png")
+        fileType.length == 1 ||
+        !(
+          fileType[1] === "jpg" ||
+          fileType[1] === "jpeg" ||
+          fileType[1] === "png"
+        )
       ) {
         throw new Error("파일 확장자 확인 : jpg, jpeg, png");
       }
@@ -56,11 +66,14 @@ app.post(
       await sharp(req.file.path)
         .resize({ width: 200, height: 200 })
         .withMetadata()
-        .toFile(`${__dirname}/../public/images/${fileName}.${fileExt[1]}`),
+        .toFile(`${__dirname}/../public/images/${fileName}.${fileType[1]}`),
         (err, info) => {
           if (err) throw err;
           console.log(`info : ${info}`);
-          fs.unlink(`${__dirname}/../public/images/`);
+          //원본 삭제
+          fs.unlink(`${__dirname}/../public/images/${req.userId}`, (err) => {
+            if (err) throw err;
+          });
         };
 
       res.status(201).send({
