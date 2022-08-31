@@ -17,10 +17,14 @@ const storage = multer.diskStorage({
     cb(null, `${__dirname}/../public/images/`);
   },
   filename: function (req, file, cb) {
-    cb(null, req.userId);
+    let extension = path.extname(file.originalname);
+    let newFileName = req.userId + extension;
+    cb(null, newFileName);
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+});
 const app = express();
 
 // CORS 에러 방지
@@ -44,47 +48,47 @@ app.use(projectRouter);
 app.use(awardRouter);
 app.use(certificateRouter);
 
-app.post(
-  "/upload",
-  login_required,
-  upload.single("file"),
-  async (req, res, next) => {
-    try {
-      let fileType = req.file.mimetype;
-      fileType = fileType.split("/");
-      if (
-        fileType.length == 1 ||
-        !(
-          fileType[1] === "jpg" ||
-          fileType[1] === "jpeg" ||
-          fileType[1] === "png"
-        )
-      ) {
-        throw new Error("파일 확장자 확인 : jpg, jpeg, png");
-      }
-      let fileName = new Date().valueOf() + req.userId;
-      await sharp(req.file.path)
-        .resize({ width: 200, height: 200 })
-        .withMetadata()
-        .toFile(`${__dirname}/../public/images/${fileName}.${fileType[1]}`),
+app.post("/upload", login_required, upload.single("file"), (req, res, next) => {
+  try {
+    let fileType = req.file.mimetype;
+    fileType = fileType.split("/");
+    if (
+      fileType.length == 1 ||
+      !(
+        fileType[1] === "jpg" ||
+        fileType[1] === "jpeg" ||
+        fileType[1] === "png"
+      )
+    ) {
+      throw new Error("파일 확장자 확인 : jpg, jpeg, png");
+    }
+    let fileName = new Date().valueOf() + req.userId;
+    sharp(req.file.path)
+      .resize({ width: 200, height: 200 })
+      .withMetadata()
+      .toFile(
+        `${__dirname}/../public/images/${fileName}.${fileType[1]}`,
         (err, info) => {
           if (err) throw err;
-          console.log(`info : ${info}`);
-          //원본 삭제
-          fs.unlink(`${__dirname}/../public/images/${req.userId}`, (err) => {
-            if (err) throw err;
-          });
-        };
+          console.log(`info: ${info}`);
+          fs.unlink(
+            `${__dirname}/../public/images/${req.userId}.${fileType[1]}`,
+            (err) => {
+              if (err) throw err;
+            }
+          );
+        }
+      );
+    //원본 삭제
 
-      res.status(201).send({
-        imgUrl: `http://localhost:5001/images/${fileName}.jpg`,
-        // imgUrl: `http://kdt-ai5-team13.elicecoding.com:5001/images/${fileName}.jpg`,
-      });
-    } catch (error) {
-      next(error);
-    }
+    res.status(201).send({
+      imgUrl: `http://localhost:5001/images/${fileName}.jpg`,
+      // imgUrl: `http://kdt-ai5-team13.elicecoding.com:5001/images/${fileName}.jpg`,
+    });
+  } catch (error) {
+    next(error);
   }
-);
+});
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 app.use(errorMiddleware);
 
