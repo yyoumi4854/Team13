@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
-
-import * as Api from "../../api";
+import apis from "../../apis/apis";
 import { DispatchContext } from "../../App";
 
 function LoginForm() {
+  const Api = apis.userRepository;
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
 
@@ -13,6 +13,8 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   //useState로 password 상태를 생성함.
   const [password, setPassword] = useState("");
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   //이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
   const validateEmail = (email) => {
@@ -36,7 +38,7 @@ function LoginForm() {
 
     try {
       // "user/login" 엔드포인트로 post요청함.
-      const res = await Api.post("user/login", {
+      const res = await Api.requestLogin({
         email,
         password,
       });
@@ -55,7 +57,8 @@ function LoginForm() {
       // 기본 페이지로 이동함.
       navigate("/", { replace: true });
     } catch (err) {
-      console.log("로그인에 실패하였습니다.\n", err);
+      console.log("로그인에 실패하였습니다.\n", err.response.data);
+      setErrorMessage(err.response.data);
     }
   };
 
@@ -69,11 +72,12 @@ function LoginForm() {
               <Form.Control
                 type="email"
                 autoComplete="on"
+                autoFocus
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               {!isEmailValid && (
-                <Form.Text className="text-success">
+                <Form.Text className="text-secondary">
                   이메일 형식이 올바르지 않습니다.
                 </Form.Text>
               )}
@@ -85,12 +89,21 @@ function LoginForm() {
                 type="password"
                 autoComplete="on"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (e.target.value.length < 4) {
+                    setErrorMessage("");
+                  }
+                }}
               />
               {!isPasswordValid && (
-                <Form.Text className="text-success">
+                <Form.Text className="text-secondary">
                   비밀번호는 4글자 이상입니다.
                 </Form.Text>
+              )}
+
+              {errorMessage && (
+                <Form.Text className="text-danger">{errorMessage}</Form.Text>
               )}
             </Form.Group>
 

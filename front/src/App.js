@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useReducer, createContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import * as Api from "./api";
+import apis from "./apis/apis";
+
 import { loginReducer } from "./reducer";
 
 import Header from "./components/Header";
@@ -9,9 +10,11 @@ import LoginForm from "./components/user/LoginForm";
 import Network from "./components/user/Network";
 import RegisterForm from "./components/user/RegisterForm";
 import Portfolio from "./components/Portfolio";
+import GlobalStyle from "./assets/style/GlobalStyled";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
+const Api = apis.userRepository;
 
 function App() {
   // useReducer 훅을 통해 userState 상태와 dispatch함수를 생성함.
@@ -26,7 +29,7 @@ function App() {
   const fetchCurrentUser = async () => {
     try {
       // 이전에 발급받은 토큰이 있다면, 이를 가지고 유저 정보를 받아옴.
-      const res = await Api.get("user/current");
+      const res = await Api.getCurrentUser();
       const currentUser = res.data;
 
       // dispatch 함수를 통해 로그인 성공 상태로 만듦.
@@ -56,6 +59,7 @@ function App() {
     <DispatchContext.Provider value={dispatch}>
       <UserStateContext.Provider value={userState}>
         <Router>
+          <GlobalStyle />
           <Header />
           <Routes>
             <Route path="/" exact element={<Portfolio />} />

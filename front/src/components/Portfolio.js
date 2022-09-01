@@ -3,10 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Container, Col, Row } from "react-bootstrap";
 
 import { UserStateContext } from "../App";
-import * as Api from "../api";
+import apis from "../apis/apis";
 import User from "./user/User";
 
+import Education from "./education/Education";
+import Award from "./award/Award";
+import Project from "./project/Project";
+import Certificate from "./certificate/Certificate";
+
 function Portfolio() {
+  const Api = apis.userRepository;
   const navigate = useNavigate();
   const params = useParams();
   // useState 훅을 통해 portfolioOwner 상태를 생성함.
@@ -18,7 +24,7 @@ function Portfolio() {
 
   const fetchPorfolioOwner = async (ownerId) => {
     // 유저 id를 가지고 "/users/유저id" 엔드포인트로 요청해 사용자 정보를 불러옴.
-    const res = await Api.get("users", ownerId);
+    const res = await Api.getUserbyId(ownerId);
     // 사용자 정보는 response의 data임.
     const ownerData = res.data;
     // portfolioOwner을 해당 사용자 정보로 세팅함.
@@ -61,11 +67,24 @@ function Portfolio() {
           />
         </Col>
         <Col>
-
-          <div style={{ textAlign: "center" }}>
-            학력 목록, 수상이력 목록, 프로젝트 목록, 자격증 목록 만들기
+          <div>
+            <Education
+              portfolioOwnerId={portfolioOwner.id}
+              isEditable={portfolioOwner.id === userState.user?.id}
+            />
+            <Award
+              portfolioOwnerId={portfolioOwner.id}
+              isEditable={portfolioOwner.id === userState.user?.id}
+            />
+            <Project
+              portfolioOwnerId={portfolioOwner.id}
+              isEditable={portfolioOwner.id === userState.user?.id}
+            />
+            <Certificate
+              portfolioOwnerId={portfolioOwner.id}
+              isEditable={portfolioOwner.id === userState.user?.id}
+            />
           </div>
-
         </Col>
       </Row>
     </Container>

@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
 
-import * as Api from "../../api";
+import apis from "../../apis/apis";
 
 function RegisterForm() {
   const navigate = useNavigate();
+  const Api = apis.userRepository;
 
   //useState로 email 상태를 생성함.
   const [email, setEmail] = useState("");
@@ -15,6 +16,9 @@ function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   //useState로 name 상태를 생성함.
   const [name, setName] = useState("");
+
+  //useState로 error메시지 받아옴
+  const [errorMessage, setErrorMessage] = useState("");
 
   //이메일이 abc@example.com 형태인지 regex를 이용해 확인함.
   const validateEmail = (email) => {
@@ -43,7 +47,7 @@ function RegisterForm() {
 
     try {
       // "user/register" 엔드포인트로 post요청함.
-      await Api.post("user/register", {
+      await Api.registerUser({
         email,
         password,
         name,
@@ -52,7 +56,7 @@ function RegisterForm() {
       // 로그인 페이지로 이동함.
       navigate("/login");
     } catch (err) {
-      console.log("회원가입에 실패하였습니다.", err);
+      setErrorMessage(err.response.data);
     }
   };
 
@@ -66,11 +70,12 @@ function RegisterForm() {
               <Form.Control
                 type="email"
                 autoComplete="off"
+                autoFocus
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               {!isEmailValid && (
-                <Form.Text className="text-success">
+                <Form.Text className="text-secondary">
                   이메일 형식이 올바르지 않습니다.
                 </Form.Text>
               )}
@@ -85,7 +90,7 @@ function RegisterForm() {
                 onChange={(e) => setPassword(e.target.value)}
               />
               {!isPasswordValid && (
-                <Form.Text className="text-success">
+                <Form.Text className="text-secondary">
                   비밀번호는 4글자 이상으로 설정해 주세요.
                 </Form.Text>
               )}
@@ -100,7 +105,7 @@ function RegisterForm() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               {!isPasswordSame && (
-                <Form.Text className="text-success">
+                <Form.Text className="text-secondary">
                   비밀번호가 일치하지 않습니다.
                 </Form.Text>
               )}
@@ -115,9 +120,13 @@ function RegisterForm() {
                 onChange={(e) => setName(e.target.value)}
               />
               {!isNameValid && (
-                <Form.Text className="text-success">
+                <Form.Text className="text-secondary">
                   이름은 2글자 이상으로 설정해 주세요.
                 </Form.Text>
+              )}
+
+              {errorMessage && (
+                <Form.Text className="text-danger">{errorMessage}</Form.Text>
               )}
             </Form.Group>
 

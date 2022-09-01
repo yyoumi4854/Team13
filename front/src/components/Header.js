@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Nav from "react-bootstrap/Nav";
 import { UserStateContext, DispatchContext } from "../App";
+import Nav from "../assets/style/NabSyled";
 
 function Header() {
   const navigate = useNavigate();
@@ -12,6 +12,7 @@ function Header() {
 
   // 전역상태에서 user가 null이 아니라면 로그인 성공 상태임.
   const isLogin = !!userState.user;
+  const userName = isLogin && userState.user.name;
 
   // 로그아웃 클릭 시 실행되는 함수
   const logout = () => {
@@ -25,20 +26,20 @@ function Header() {
 
   return (
     <Nav activeKey={location.pathname}>
-      <Nav.Item className="me-auto mb-5">
-        <Nav.Link disabled>안녕하세요, 포트폴리오 공유 서비스입니다.</Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link onClick={() => navigate("/")}>나의 페이지</Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link onClick={() => navigate("/network")}>네트워크</Nav.Link>
-      </Nav.Item>
-      {isLogin && (
-        <Nav.Item>
-          <Nav.Link onClick={logout}>로그아웃</Nav.Link>
-        </Nav.Item>
-      )}
+      <span className="textInfo">
+        안녕하세요,
+        <span className="name">{isLogin ? ` ${userName}님` : ""}</span>
+        포트폴리오 공유 서비스입니다.
+      </span>
+      <div className="btnWrap">
+        <button onClick={() => navigate("/")}>나의페이지</button>
+        <button onClick={() => navigate("/network")}>네트워크</button>
+        {isLogin && (
+          <button className="logBtn" onClick={logout}>
+            로그아웃
+          </button>
+        )}
+      </div>
     </Nav>
   );
 }
