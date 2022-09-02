@@ -38,6 +38,8 @@ yarn start
 
 2. 전체적인 로직은 모두 같으며, Education MVP 의 경우는 다음과 같이 동작합니다.
 
+<img src="/uploads/c2b5dd7141b8621a16309756d74edbf8/화면_기록_2022-09-02_오후_6.26.37.mov"/>
+
 	- 포트폴리오 컴포넌트는 Education 컴포넌트를 사용합니다.
 
 	- Education은  학력 **목록**으로, 여러 개의 EducationList 컴포넌트와 + 버튼 버튼 클릭 시 학력을 추가할 수 있는AwardForm 컴포넌트로 구성됩니다.
