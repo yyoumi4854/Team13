@@ -69,3 +69,12 @@ yarn start
 - src/middlewares:
   - jwt토큰을 다루는 미들웨어인 login_required.js
   - 학습 편의를 위해 일괄 http 400 코드로 에러를 변환하는 에러핸들러인 errorMiddleware.js
+
+
+3. 사진 업로드
+
+- app.js:
+  - multer 패키지를 사용하여 사진 업로드
+  - sharp 패키지를 사용하여 리사이징
+
+
