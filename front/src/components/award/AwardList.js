@@ -9,6 +9,16 @@ const AwardList = ({
 }) => {
   const { name, description } = award;
 
+  // 삭제
+  const handleDeleteClick = async (e) => {
+    deleteAward(award._id);
+  };
+
+  // 편집모드
+  const handleEditClick = async (e) => {
+    changeEditMode(index);
+  };
+
   return (
     <div className="align-items-center mt-4 row">
       <div className="col list">
@@ -20,9 +30,7 @@ const AwardList = ({
           <button
             type="button"
             className="me-2 btn btn-outline-primary btn-sm"
-            onClick={(e) => {
-              changeEditMode(index);
-            }}
+            onClick={handleEditClick}
           >
             편집
           </button>
@@ -30,9 +38,7 @@ const AwardList = ({
           <button
             type="button"
             className="btn btn-outline-secondary btn-sm"
-            onClick={(e) => {
-              deleteAward(award._id);
-            }}
+            onClick={handleDeleteClick}
           >
             삭제
           </button>

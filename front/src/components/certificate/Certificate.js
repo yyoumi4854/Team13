@@ -11,10 +11,15 @@ const Certificate = ({ isEditable, portfolioOwnerId }) => {
   const [certificates, setCertificates] = useState([]);
   const Api = apis.cerRepository;
 
+  // certificate list (api=> get)
   useEffect(() => {
-    Api.getCertificates(portfolioOwnerId).then((res) => {
-      setCertificates(res.data);
-    });
+    try {
+      Api.getCertificates(portfolioOwnerId).then((res) => {
+        setCertificates(res.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }, [portfolioOwnerId]);
 
   const dateFormat = (date) => {
@@ -27,7 +32,7 @@ const Certificate = ({ isEditable, portfolioOwnerId }) => {
     return date.getFullYear() + "-" + month + "-" + day;
   };
 
-  // add certificate
+  // certificate 추가 (api => post)
   const addCertificate = async (newCertificate) => {
     const { date } = newCertificate;
 
@@ -43,15 +48,14 @@ const Certificate = ({ isEditable, portfolioOwnerId }) => {
     }
   };
 
-  // certificate editmode
+  // 수정 모드 변경
   const changeEditMode = (index) => {
     const newCertificate = [...certificates];
     newCertificate[index].isEditing = true;
-
     setCertificates(newCertificate);
   };
 
-  //delete
+  //certificate 삭제 (api => delete)
   const deleteCertificate = async (certificateId) => {
     try {
       const res = await Api.deleteCertificateById(certificateId);
@@ -62,8 +66,7 @@ const Certificate = ({ isEditable, portfolioOwnerId }) => {
     }
   };
 
-  // edit
-
+  // certificate 수정 (api => patch)
   const confirmEdit = async (changeData) => {
     const { date } = changeData;
 
@@ -79,6 +82,7 @@ const Certificate = ({ isEditable, portfolioOwnerId }) => {
     }
   };
 
+  //수정 취소
   const cancelEdit = (index) => {
     const newCertificate = [...certificates];
     newCertificate[index] = { ...certificates[index], isEditing: false };
@@ -111,25 +115,25 @@ const Certificate = ({ isEditable, portfolioOwnerId }) => {
                 />
               );
             })}
-            <div className="text-center mt-4 mb-3">
-              {isEditable && (
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={(e) => setIsAdding(true)}
-                >
-                  +
-                </button>
-              )}
-            </div>
+          <div className="text-center mt-4 mb-3">
+            {isEditable && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={(e) => setIsAdding(true)}
+              >
+                +
+              </button>
+            )}
+          </div>
         </div>
-        {isEditable && 
-          <CertificateAddForm 
-            addCertificate={addCertificate} 
-            isAdding={isAdding} 
-            setIsAdding={setIsAdding} 
+        {isEditable && (
+          <CertificateAddForm
+            addCertificate={addCertificate}
+            isAdding={isAdding}
+            setIsAdding={setIsAdding}
           />
-        }
+        )}
       </CardList>
     </Card>
   );

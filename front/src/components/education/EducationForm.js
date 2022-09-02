@@ -10,14 +10,6 @@ const PHD_GRADUATION = "박사졸업";
 const EducationForm = ({ education, confirmEducation, cancelEducation }) => {
   const [targetEducation, setTargetEducation] = useState({ ...education });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setTargetEducation({
-      ...targetEducation,
-      [name]: value,
-    });
-  };
-  
   // 학교이름 2글자 이상인가 확인
   const isNameValid = targetEducation.name.length >= 2;
   // 전공이름 2글자 이상인가 확인
@@ -25,12 +17,20 @@ const EducationForm = ({ education, confirmEducation, cancelEducation }) => {
   // 위 2개 조건이 동시에 만족되는 확인
   const isFormValid = isNameValid && isMajorValid;
 
-  // 확인
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setTargetEducation({
+      ...targetEducation,
+      [name]: value,
+    });
+  };
+
+  // edit 확인
   const handleconfirmClick = () => {
     confirmEducation({ ...targetEducation });
   };
 
-  // 취소
+  // edit 취소
   const handleCancelClick = () => {
     cancelEducation();
   };
@@ -49,7 +49,7 @@ const EducationForm = ({ education, confirmEducation, cancelEducation }) => {
           />
           {!isNameValid && (
             <Form.Text className="text-secondary">
-              학교 이름을 2글자 이상으로 작성해 주세요. 
+              학교 이름을 2글자 이상으로 작성해 주세요.
             </Form.Text>
           )}
         </Form.Group>
@@ -135,6 +135,6 @@ const EducationForm = ({ education, confirmEducation, cancelEducation }) => {
       </Form.Group>
     </Form>
   );
-}
+};
 
 export default EducationForm;

@@ -26,6 +26,9 @@ const AwardAddForm = ({ addAward, isAdding, setIsAdding }) => {
       clearForm();
     }
   };
+  const handleCancelClick = (e) => {
+    clearForm();
+  };
 
   return (
     <div className="mt-3 ">
@@ -60,19 +63,17 @@ const AwardAddForm = ({ addAward, isAdding, setIsAdding }) => {
           </Form.Group>
           <div className="mb-5">
             <div className="text-center">
-              <button 
+              <button
                 className="me-3 btn btn-primary"
-                type="submit" 
+                type="submit"
                 disabled={!isFormValid}
               >
                 확인
               </button>{" "}
               <button
-              type="button"
+                type="button"
                 className="btn btn-secondary"
-                onClick={(e) => {
-                  clearForm();
-                }}
+                onClick={handleCancelClick}
               >
                 취소
               </button>{" "}

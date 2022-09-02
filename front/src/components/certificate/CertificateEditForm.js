@@ -8,15 +8,11 @@ const CertificateEditForm = ({
   confirmEdit,
   cancelEdit,
 }) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [certifiedDate, setCertifiedDate] = useState(new Date());
-
-  useEffect(() => {
-    setName(certificate.name);
-    setDescription(certificate.description);
-    setCertifiedDate(new Date(certificate.date));
-  }, []);
+  const [name, setName] = useState(certificate.name);
+  const [description, setDescription] = useState(certificate.description);
+  const [certifiedDate, setCertifiedDate] = useState(
+    new Date(certificate.date)
+  );
 
   // 자격증 이름이 2글자 이상인가 확인
   const isNameValid = name.length >= 2;
@@ -25,16 +21,23 @@ const CertificateEditForm = ({
   // 위 2개 조건이 모두 동시에 만족하는지 확인
   const isFormValid = isNameValid && isDescriptionValid;
 
-  const onHandleClick = (e) => {
+  // edit 확인
+  const handleEditSumit = (e) => {
     e.preventDefault();
-    if (name && description) {
-      confirmEdit({
-        certificateId: certificate._id,
-        name,
-        description,
-        date: certifiedDate,
-      });
-    }
+    if (!name || !description) return;
+
+    confirmEdit({
+      certificateId: certificate._id,
+      name,
+      description,
+      date: certifiedDate,
+    });
+  };
+
+  // edit 취소
+  const handleCancelClick = (e) => {
+    e.preventDefault();
+    cancelEdit(index);
   };
 
   return (
@@ -78,16 +81,11 @@ const CertificateEditForm = ({
             className="me-3 btn btn-primary"
             type="submit"
             disabled={!isFormValid}
-            onClick={(e) => onHandleClick(e)}
+            onClick={handleEditSumit}
           >
             확인
           </button>{" "}
-          <button
-            className="btn btn-secondary"
-            onClick={(e) => {
-              cancelEdit(index);
-            }}
-          >
+          <button className="btn btn-secondary" onClick={handleCancelClick}>
             취소
           </button>{" "}
         </div>

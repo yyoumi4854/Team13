@@ -2,13 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 
 const AwardEditForm = ({ index, award, confirmEdit, cancelEdit }) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-
-  useEffect(() => {
-    setName(award.name);
-    setDescription(award.description);
-  }, []);
+  const [name, setName] = useState(award.name);
+  const [description, setDescription] = useState(award.description);
 
   // 수상이력 이름이 2글자 이상인가 확인
   const isNameValid = name.length >= 2;
@@ -17,11 +12,17 @@ const AwardEditForm = ({ index, award, confirmEdit, cancelEdit }) => {
   // 위 2개 조건이 모두 동시에 만족하는지 확인
   const isFormValid = isNameValid && isDescriptionValid;
 
+  // edit 확인
   const handleEditSumit = (e) => {
     e.preventDefault();
-    if (name && description) {
-      confirmEdit(index, { awardId: award._id, name, description });
-    }
+    if (!name || !description) return;
+    confirmEdit(index, { awardId: award._id, name, description });
+  };
+
+  // edit 취소
+  const handleCancelClick = (e) => {
+    e.preventDefault();
+    cancelEdit(index);
   };
 
   return (
@@ -63,12 +64,7 @@ const AwardEditForm = ({ index, award, confirmEdit, cancelEdit }) => {
           >
             확인
           </button>{" "}
-          <button
-            className="btn btn-secondary"
-            onClick={(e) => {
-              cancelEdit(index);
-            }}
-          >
+          <button className="btn btn-secondary" onClick={handleCancelClick}>
             취소
           </button>{" "}
         </div>

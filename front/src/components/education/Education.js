@@ -11,7 +11,7 @@ const Education = ({ portfolioOwnerId, isEditable }) => {
   const [isAdding, setIsAdding] = useState(false);
   const Api = apis.eduRepository;
 
-  // get 요청
+  // education list (api=> get)
   useEffect(() => {
     Api.getEducations(portfolioOwnerId).then((res) => setEducations(res.data));
   }, [portfolioOwnerId]);
@@ -25,7 +25,7 @@ const Education = ({ portfolioOwnerId, isEditable }) => {
     }
   };
 
-  // 추가 (api => post)
+  // education 추가 (api => post)
   const confirmAddEduction = async (targetEducation) => {
     try {
       const res = await Api.createEducation({
@@ -44,12 +44,12 @@ const Education = ({ portfolioOwnerId, isEditable }) => {
     setIsAdding(false);
   };
 
-  // 취소
+  // education 추가 취소
   const cancelAddEducation = () => {
     setIsAdding(false);
   };
 
-  // 수정 (api => patch)
+  // education 수정 (api => patch)
   const updateEducation = async (editedEducationObj) => {
     try {
       const res = await Api.updateEducation({
@@ -66,7 +66,7 @@ const Education = ({ portfolioOwnerId, isEditable }) => {
     }
   };
 
-  // 삭제 (api => delete)
+  // education 삭제 (api => delete)
   const deleteEducation = async (educationId) => {
     try {
       const res = await Api.deleteEducationById(educationId);

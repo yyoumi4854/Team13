@@ -47,12 +47,8 @@ const EducationList = ({
         <div className="align-items-center mt-4 row">
           <div className="col list">
             <span className="name">{education.name}</span>
-            <span className="description inlineText">
-              {education.major}
-            </span>
-            <span className="rest">{`${
-              education.status || ""
-            }`}</span>
+            <span className="description inlineText">{education.major}</span>
+            <span className="rest">{`${education.status || ""}`}</span>
           </div>
           {isEditable && (
             <div className="d-flex justify-content-center col-md-2 mt-3">
