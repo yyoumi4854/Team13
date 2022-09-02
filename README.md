@@ -83,6 +83,7 @@
 - react에서 제공하는 boot-strap을 기본으로 사용
 - 스타일링을 별도로 주기 위하여  styled-component 라이브러리를 사용
 
+<br>
 
 ## 설치 방법
 
