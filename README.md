@@ -42,6 +42,7 @@
 <img src="/uploads/ffaaa6bede8b148b3072dfb2bc26578f/스크린샷_2022-09-02_오후_4.56.11.png" width ="500" height=auto>
 
 <br> 
+
 ### 상세기능
 
 1. **User**
