@@ -1,41 +1,55 @@
 # 13팀 / 베스킨라빈스 31 🍦
    
-##  포트폴리오 공유 웹서비스
+##  📌 포트폴리오 공유 웹서비스
 > 이 프로젝트는 자기자신의 포트폴리오를 작성하고, 또한 다른 사람의 포트폴리오를 확인할 수 있는 웹 서비스입니다.   
    
  <br> 
 
-### 팀원
-|  포지션|이름  |
-|--|--|
-|프론트엔드| 남궁혜진  |
-| 프론트엔드 | 임정은 |
-| 프론트엔드 | 유민지 |
-| 백엔드 | 신채민 |
-| 백엔드 | 진시하 |
-   
- <br>    
+## ► 주요사용기술
 
-## 주요사용기술
-
- - 프론트엔드
-	 - React (create-react-app으로 구현)
-		 - react-bootstrap
-		 - react-datepicker
-		 - styled-components
-	 - Axios
+ - 프론트엔드 <br>
+ <img src="https://img.shields.io/badge/JavaScript-ECD53F?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
+ <img src="https://img.shields.io/badge/React-61DAFB?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
+ <img src="https://img.shields.io/badge/Bootstrap-7952B3?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
+<img src="https://img.shields.io/badge/styled-components-DB7093?
+style=flat		//배지 스타일
+&logoColor=white"/>
+<img src="https://img.shields.io/badge/Axios-5A29E4?
+style=flat		//배지 스타일
+&logoColor=white"/>
 
 <br>
 
- - 백엔드
-	- Express (nodemon, babel-node로 실행)
-	- Mongodb, Mongoose
-	- multer, sharp
+ - 백엔드<br>
+ <img src="https://img.shields.io/badge/JavaScript-ECD53F?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
+  <img src="https://img.shields.io/badge/Node.js-339933?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
+  <img src="https://img.shields.io/badge/MongoDB-00A98F?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
+  <img src="https://img.shields.io/badge/Mongoose-FF6550?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
+  <img src="https://img.shields.io/badge/multer-9999FF?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
+  <img src="https://img.shields.io/badge/sharp-5A45FF?
+          style=flat		//배지 스타일
+          &logoColor=white"/>
 
  
  <br> 
 
-## 기능
+## ► 기능
 
 ### 서비스구조
 
@@ -78,7 +92,7 @@
 		- 달력으로 날짜 입력 받을 때 react-datepicker 라이브러리로 달력 구성
 <br> 
 
-## 디자인
+## ► 디자인
 
 - Figma를 사용하여 전반적인 디자인을 구성하였고   
 - react에서 제공하는 boot-strap을 기본으로 사용
@@ -86,7 +100,7 @@
 
 <br>
 
-## 설치 방법
+## ► 설치 방법
 
 1. 프론트 엔드 서버 실행
 
@@ -103,6 +117,17 @@ back 폴더 내부 README 참고
 ```
 
 ---
+
+## ► 팀원
+|  포지션|이름  |
+|--|--|
+|프론트엔드| 남궁혜진  |
+| 프론트엔드 | 임정은 |
+| 프론트엔드 | 유민지 |
+| 백엔드 | 신채민 |
+| 백엔드 | 진시하 |
+   
+ <br>    
 
 본 프로젝트에서 제공하는 모든 코드 등의는 저작권법에 의해 보호받는 ㈜엘리스의 자산이며, 무단 사용 및 도용, 복제 및 배포를 금합니다.
 Copyright 2022 엘리스 Inc. All rights reserved.
